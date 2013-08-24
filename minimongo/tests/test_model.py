@@ -240,9 +240,7 @@ def test_load_and_field_mapper():
 def test_index_existance():
     '''Test that indexes were created properly.'''
     indices = TestModel.collection.index_information()
-    assert (indices['x_1'] == {'key': [('x', 1)]})\
-        or (indices['x_1'] == {u'key': [(u'x', 1)], u'v': 1})
-
+    assert (indices['x_1'] == {'key': [('x', 1)]})
 
 def test_unique_index():
     '''Test behavior of indices with unique=True'''
@@ -476,20 +474,9 @@ def test_collection_class():
     assert model.collection.custom() == 'It works!'
 
 
-def test_str_and_unicode():
+def test_str():
     assert str(TestModel()) == 'TestModel({})'
     assert str(TestModel({'foo': 'bar'})) == 'TestModel({\'foo\': \'bar\'})'
-
-    assert unicode(TestModel({'foo': 'bar'})) == \
-           u'TestModel({\'foo\': \'bar\'})'
-
-    # __unicode__() doesn't decode any bytestring values to unicode,
-    # leaving it up to the user.
-    assert unicode(TestModel({'foo': '←'})) ==  \
-           u'TestModel({\'foo\': \'\\xe2\\x86\\x90\'})'
-    assert unicode(TestModel({'foo': u'←'})) == \
-           u'TestModel({\'foo\': u\'\\u2190\'})'
-
 
 def test_auto_collection_name():
     try:
@@ -506,18 +493,18 @@ def test_no_auto_index():
     TestNoAutoIndexModel({'x': 1}).save()
 
     assert (TestNoAutoIndexModel.collection.index_information() == \
-           {u'_id_': {u'key': [(u'_id', 1)]}})\
+           {'_id_': {'key': [('_id', 1)]}})\
            or (TestNoAutoIndexModel.collection.index_information() ==\
-           {u'_id_': {u'key': [(u'_id', 1)], u'v': 1}})
+           {'_id_': {'key': [('_id', 1)], 'v': 1}})
 
     TestNoAutoIndexModel.auto_index()
 
     assert (TestNoAutoIndexModel.collection.index_information() == \
-           {u'_id_': {u'key': [(u'_id', 1)],  u'v': 1},
-            u'x_1': {u'key': [(u'x', 1)],  u'v': 1}})\
+           {'_id_': {'key': [('_id', 1)],  'v': 1},
+            'x_1': {'key': [('x', 1)],  'v': 1}})\
             or (TestNoAutoIndexModel.collection.index_information() == \
-            {u'_id_': {u'key': [(u'_id', 1)]},
-            u'x_1': {u'key': [(u'x', 1)]}})
+            {'_id_': {'key': [('_id', 1)]},
+            'x_1': {'key': [('x', 1)]}})
 
 
 def test_interface_models():
