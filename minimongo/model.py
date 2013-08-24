@@ -96,13 +96,13 @@ class AttrDict(dict):
         # AttrDict.  Maybe this could be better done with the builtin
         # defaultdict?
         if initial:
-            for key, value in initial.iteritems():
+            for key, value in initial.items():
                 # Can't just say self[k] = v here b/c of recursion.
                 self.__setitem__(key, value)
 
         # Process the other arguments (assume they are also default values).
         # This is the same behavior as the regular dict constructor.
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             self.__setitem__(key, value)
 
         super(AttrDict, self).__init__()
@@ -139,7 +139,7 @@ class AttrDict(dict):
         return super(AttrDict, self).__setitem__(key, new_value)
 
 
-class Model(AttrDict):
+class Model(AttrDict, metaclass=ModelBase):
     """Base class for all Minimongo objects.
 
     >>> class Foo(Model):
@@ -155,8 +155,6 @@ class Model(AttrDict):
     >>> foo.bar == 42
     True
     """
-
-    __metaclass__ = ModelBase
 
     def __str__(self):
         return '%s(%s)' % (self.__class__.__name__,

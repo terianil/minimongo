@@ -9,8 +9,8 @@ class Cursor(PyMongoCursor):
         self._wrapper_class = kwargs.pop('wrap')
         super(Cursor, self).__init__(*args, **kwargs)
 
-    def next(self):
-        data = super(Cursor, self).next()
+    def __next__(self):
+        data = super(Cursor, self).__next__()
         return self._wrapper_class(data)
 
     def __getitem__(self, index):
