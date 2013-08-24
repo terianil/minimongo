@@ -21,7 +21,7 @@ def configure(module=None, prefix='MONGODB_', **kwargs):
     if module is not None and isinstance(module, types.ModuleType):
         # Search module for MONGODB_* attributes and converting them
         # to _Options' values, ex: MONGODB_PORT ==> port.
-        attrs = module.__dict__.iteritems()
+        attrs = iter(module.__dict__.items())
         attrs = ((attr.replace(prefix, '').lower(), value)
                  for attr, value in attrs if attr.startswith(prefix))
 
@@ -72,5 +72,5 @@ class _Options(object):
     @classmethod
     def _configure(cls, **defaults):
         """Updates class-level defaults for :class:`_Options` container."""
-        for attr, value in defaults.iteritems():
+        for attr, value in defaults.items():
             setattr(cls, attr, value)
