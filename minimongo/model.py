@@ -195,9 +195,9 @@ class Model(AttrDict, metaclass=ModelBase):
         database = self._meta.database if with_database else None
         return DBRef(self._meta.collection, self._id, database, **kwargs)
 
-    def remove(self):
+    def remove(self, **kwargs):
         """Remove this object from the database."""
-        return self.collection.remove(self._id)
+        return self.collection.remove(self._id, **kwargs)
 
     def mongo_update(self, values=None, **kwargs):
         """Update database data with object data."""
