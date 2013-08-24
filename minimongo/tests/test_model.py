@@ -97,6 +97,7 @@ def setup():
 def teardown():
     # This will drop the entire minimongo_test database.  Careful!
     TestModel.connection.drop_database(TestModel.database)
+    #pass
 
 
 def test_meta():
@@ -247,8 +248,11 @@ def test_load_and_field_mapper():
 @with_setup(setup, teardown)
 def test_index_existance():
     '''Test that indexes were created properly.'''
+    a = TestModel({'x': 1})
+    a.save(safe=True)
     indices = TestModel.collection.index_information()
-    assert (indices['x_1'] == {'key': [('x', 1)]})
+    print(indices)
+    assert (indices['x_1']['key'] == [('x', 1)])
 
 @with_setup(setup, teardown)
 def test_unique_index():
@@ -316,13 +320,12 @@ def test_deletion():
     object_a.y = 200
     object_a.save()
 
-    object_b = TestModel.collection.find({'x': 100})
-    assert object_b.count() == 1
-
-    map(operator.methodcaller('remove'), object_b)
-
-    object_a = TestModel.collection.find({'x': 100})
-    assert object_a.count() == 0
+    cur = TestModel.collection.find({'x': 100})
+    assert cur.count() == 1
+    x = cur[0]
+    x.remove()
+    cur = TestModel.collection.find({'x': 100})
+    assert cur.count() == 0
 
 
 @with_setup(setup, teardown)
