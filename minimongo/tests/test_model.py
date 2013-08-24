@@ -8,6 +8,7 @@ import pytest
 from bson import DBRef
 from minimongo import Collection, Index, Model
 from pymongo.errors import DuplicateKeyError
+from nose import with_setup
 
 
 class TestCollection(Collection):
@@ -112,7 +113,7 @@ def test_meta():
     assert meta.collection == 'minimongo_test'
     assert meta.indices == (Index('x'), )
 
-
+@with_setup(setup, teardown)
 def test_dictyness():
     item = TestModel({'x': 642})
 
@@ -130,6 +131,7 @@ def test_dictyness():
     assert item == {'z': 3}
 
 
+@with_setup(setup, teardown)
 def test_creation():
     '''Test simple object creation and querying via find_one.'''
     object_a = TestModel({'x': 1, 'y': 1})
@@ -149,6 +151,7 @@ def test_creation():
     assert object_b == {'x': 1, 'y': 1, 'z': 1, '_id': object_b._id}
 
 
+@with_setup(setup, teardown)
 def test_find_one():
     model = TestModel({'x': 1, 'y': 1})
     model.save()
@@ -161,6 +164,7 @@ def test_find_one():
     assert found == model
 
 
+@with_setup(setup, teardown)
 def test_save_with_arguments():
     # Manipulate is what inserts the _id on save if it is missing
     model = TestModel(foo=0)
@@ -172,6 +176,7 @@ def test_save_with_arguments():
     assert model.foo == 0
 
 
+@with_setup(setup, teardown)
 def test_mongo_update():
     """Test update. note that update does not sync back the server copy."""
     model = TestModel(counter=10, x=0, y=1)
@@ -199,6 +204,7 @@ def test_mongo_update():
     assert model.y == 1
 
 
+@with_setup(setup, teardown)
 def test_load():
     """Partial loading of documents.x"""
     # object_a and object_b are 2 instances of the same document
@@ -220,6 +226,7 @@ def test_load():
     assert object_b.y == object_a.y
 
 
+@with_setup(setup, teardown)
 def test_load_and_field_mapper():
     object_a = TestFieldMapper(x=12, y=1).save()
     object_b = TestFieldMapper(_id=object_a._id)
@@ -237,11 +244,13 @@ def test_load_and_field_mapper():
     assert object_b.y == 1
 
 
+@with_setup(setup, teardown)
 def test_index_existance():
     '''Test that indexes were created properly.'''
     indices = TestModel.collection.index_information()
     assert (indices['x_1'] == {'key': [('x', 1)]})
 
+@with_setup(setup, teardown)
 def test_unique_index():
     '''Test behavior of indices with unique=True'''
     # This will work (y is undefined)
@@ -259,6 +268,7 @@ def test_unique_index():
     assert TestModelUnique.collection.find().count() == 2
 
 
+@with_setup(setup, teardown)
 def test_unique_constraint():
     x1_a = TestModelUnique({'x': 1, 'y': 1})
     x1_b = TestModelUnique({'x': 1, 'y': 2})
@@ -271,6 +281,7 @@ def test_unique_constraint():
     x1_c.save()
 
 
+@with_setup(setup, teardown)
 def test_queries():
     '''Test some more complex query forms.'''
     object_a = TestModel({'x': 1, 'y': 1}).save()
@@ -297,6 +308,7 @@ def test_queries():
     assert object_c == list_x2y2[0]
 
 
+@with_setup(setup, teardown)
 def test_deletion():
     '''Test deleting an object from a collection.'''
     object_a = TestModel()
@@ -313,6 +325,7 @@ def test_deletion():
     assert object_a.count() == 0
 
 
+@with_setup(setup, teardown)
 def test_complex_types():
     '''Test lists as types.'''
     object_a = TestModel()
@@ -352,6 +365,7 @@ def test_complex_types():
     assert object_a == object_b
 
 
+@with_setup(setup, teardown)
 def test_type_from_cursor():
     object_a = TestModel({'x':1}).save()
     object_b = TestModel({'x':2}).save()
@@ -369,6 +383,7 @@ def test_type_from_cursor():
         assert type(single_object['x']) == int
 
 
+@with_setup(setup, teardown)
 def test_delete_field():
     '''Test deleting a single field from an object.'''
     object_a = TestModel({'x': 1, 'y': 2})
@@ -380,6 +395,7 @@ def test_delete_field():
            {'y': 2, '_id': object_a._id}
 
 
+@with_setup(setup, teardown)
 def test_count_and_fetch():
     '''Test counting methods on Cursors. '''
     object_d = TestModel({'x': 1, 'y': 4}).save()
@@ -397,6 +413,7 @@ def test_count_and_fetch():
     assert list_x1[3] == object_d
 
 
+@with_setup(setup, teardown)
 def test_fetch_and_limit():
     '''Test counting methods on Cursors. '''
     object_a = TestModel({'x': 1, 'y': 1}).save()
@@ -411,6 +428,7 @@ def test_fetch_and_limit():
     assert object_b in find_x1
 
 
+@with_setup(setup, teardown)
 def test_dbref():
     '''Test generation of DBRef objects, and querying via DBRef
     objects.'''
