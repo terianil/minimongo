@@ -32,6 +32,8 @@ setup.py install``.
 Dependencies
 ============
 - pymongo_ 1.9+
+- nose
+- pytest
 - `sphinx <http://sphinx.pocoo.org>`_ (optional -- for documentation generation)
 
 
