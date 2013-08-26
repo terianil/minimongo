@@ -36,6 +36,18 @@ Dependencies
 - pytest
 - `sphinx <http://sphinx.pocoo.org>`_ (optional -- for documentation generation)
 
+Virtualenv
+==========
+virtualenv -p /usr/bin/python3 py3env
+source py3env/bin/activate
+pip install nose
+pip install pytest
+pip install pymongo 
+
+
+ 
+
+
 
 Example
 -------
