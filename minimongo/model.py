@@ -58,7 +58,7 @@ class ModelBase(type):
             # creates :class:`pymongo.connection.Connection` object without
             # establishing connection. It's required if there is no running
             # mongodb at this time but we want to create :class:`Model`.
-            connection = Connection(*hostport, _connect=False)
+            connection = Connection(*hostport)
             mcs._connections[hostport] = connection
 
         new_class._meta = options
