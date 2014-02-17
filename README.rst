@@ -19,6 +19,11 @@ calls the existing pymongo_ query syntax.
 will work properly with almost any existing schema, even from third party
 applications.
 
+Python3
+-------
+
+There's a working Python3 port on the feat_py3k branch!!!!
+
 
 Installation
 ------------
